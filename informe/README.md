@@ -13,7 +13,16 @@ Este repositorio contiene el taller final del curso de Sistemas Operativos. A co
 
 ## Descripción del Taller
 
-En este taller, se configurarán varios servidores utilizando Debian y Ubuntu Server para proporcionar servicios de SFTP, DNS, Web, DHCP y compartición de archivos.
+En este taller, se configurarán varios servidores utilizando Debian y Ubuntu Server para proporcionar servicios de SFTP, DNS, Web, DHCP y compartición de archivos. 
+
+Esta actividad representa la actividad final del curso de Sistemas Operativos, para cumplir con la competencias establecidas deberán desarrollar la siguientes actividad:
+
+Utilizando herramientas de virtualización, diseñe la estructura necesaria para cumplir con la topología propuesta en la imagen.
+Los servidores serverManchester, serverMadrid y serverOslo serán lanzados bajo debian y el serverParis bajo ubuntuServer. (Ultima versión o la anterior estable).
+Cada servidor mencionado es una máquina o instancia independiente.
+Por practicidad al momento de verificar las configuraciones, se revisará en un primer momento el servicio DHCP, posteriormente se validarán los demás servicios.
+Cada equipo de trabajo deberá realizar un informe que detalle todo el proceso de desarrollo y configuración del laboratorio.
+Cada equipo deberá realizar una presentación para el día de la sustención.
 
 ![Diagrama de Topología](diagrama_topologia.png)
 
