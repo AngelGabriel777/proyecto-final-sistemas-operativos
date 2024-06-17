@@ -13,8 +13,6 @@ Este repositorio contiene el taller final del curso de Sistemas Operativos. A co
 
 ## Descripción del Taller
 
-En este taller, se configurarán varios servidores utilizando Debian y Ubuntu Server para proporcionar servicios de SFTP, DNS, Web, DHCP y compartición de archivos. 
-
 Esta actividad representa la actividad final del curso de Sistemas Operativos, para cumplir con la competencias establecidas deberán desarrollar la siguientes actividad:
 
 1. Utilizando herramientas de virtualización, diseñe la estructura necesaria para cumplir con la topología propuesta en la imagen.
