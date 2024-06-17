@@ -1,4 +1,4 @@
-# Proyecto Final - Sistemas Operativos 2024-1
+# ![Logo Universidad](logo_universidad.png) Proyecto Final - Sistemas Operativos 2024-1
 
 Este repositorio contiene el taller final del curso de Sistemas Operativos. A continuación, se detallan las configuraciones y servicios implementados en cada servidor.
 
@@ -12,9 +12,13 @@ Este repositorio contiene el taller final del curso de Sistemas Operativos. A co
 - [Informe Detallado](informe/README.md)
 
 ## Descripción del Taller
+
 En este taller, se configurarán varios servidores utilizando Debian y Ubuntu Server para proporcionar servicios de SFTP, DNS, Web, DHCP y compartición de archivos.
 
+![Diagrama de Topología](diagrama_topologia.png)
+
 ## Configuración de Servidores
+
 Cada servidor tiene su propia sección donde se detallan los pasos para su configuración:
 - [Server Manchester](serverManchester/README.md)
 - [Server Madrid](serverMadrid/README.md)
@@ -22,4 +26,5 @@ Cada servidor tiene su propia sección donde se detallan los pasos para su confi
 - [Server Paris](serverParis/README.md)
 
 ## Informe Detallado
+
 Un informe detallado que documenta todo el proceso de configuración se puede encontrar en la sección [Informe Detallado](informe/README.md).
