@@ -6,10 +6,8 @@
 
 Actualice la lista de paquetes e instale las últimas versiones de los paquetes disponibles:
 
-~~~
+```sh
 sudo apt update
 sudo apt upgrade -y
-...
-~~~
 
-## _HOLA ME LLAMO aNGEL_
+#_HOLA_
