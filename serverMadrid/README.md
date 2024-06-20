@@ -9,4 +9,5 @@ sudo apt update
 sudo apt install bind9 bind9utils bind9-doc
 
 
-# Instalación del Software Necesario
+1.2 Instalación de BIND9
+Instale bind9, bind9utils, y bind9-doc para configurar el servidor DNS:
