@@ -19,3 +19,11 @@ Actualice el sistema e instale `bind9`:
 sudo apt update
 sudo apt install bind9 bind9utils bind9-doc
 
+## Configuracion de las Zonas de DNS
+### Edite /etc/bind/named.conf.localy añada:
+
+```sh
+zone "unisimon.com" {
+    type master;
+    file "/etc/bind/zones/db.unisimon.com";
+};
