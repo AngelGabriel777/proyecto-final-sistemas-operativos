@@ -10,7 +10,7 @@ zone "unisimon.com" {
     file "/etc/bind/zones/db.unisimon.com";
 };
 
-### Cree el archivo de zona:
+## Cree el archivo de zona:
 
 ```sh
 sudo mkdir -p /etc/bind/zones
