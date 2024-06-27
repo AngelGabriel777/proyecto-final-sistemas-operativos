@@ -32,6 +32,11 @@ En el servidor, asegúrate de tener instalados los siguientes paquetes:
     sudo apt-get install openssh-server
     ```
 
+2. Verifica que el servicio SSH esté corriendo:
+    ```sh
+    sudo systemctl status ssh
+    ```
+
 ### Configuración de Usuarios SFTP
 
 1. Crea un usuario `sftpuser` con un directorio específico para SFTP:
@@ -100,6 +105,21 @@ En el servidor, asegúrate de tener instalados los siguientes paquetes:
     sudo systemctl restart ssh
     ```
 
+4. Verifica que la autenticación por clave está habilitada y que el acceso por contraseña está deshabilitado en el archivo de configuración de SSH:
+    ```sh
+    sudo nano /etc/ssh/sshd_config
+    ```
+    Asegúrate de que las siguientes líneas estén configuradas correctamente:
+    ```
+    PasswordAuthentication no
+    PubkeyAuthentication yes
+    ```
+
+5. Aplica los cambios reiniciando el servicio SSH nuevamente:
+    ```sh
+    sudo systemctl restart ssh
+    ```
+
 ## 4. Configuración del Cliente FileZilla
 
 ### Configuración Básica en FileZilla
@@ -124,6 +144,25 @@ En el servidor, asegúrate de tener instalados los siguientes paquetes:
 2. Intenta subir un archivo a `/uploads` y luego descargarlo para asegurarte de que la transferencia funciona correctamente.
 3. Asegúrate de que los archivos subidos tengan permisos adecuados para `sftpuser`.
 
-## 6. Conclusión
+## 6. Configuración Adicional de Seguridad
+
+1. Deshabilitar el acceso SSH para el usuario `sftpuser` agregando esta línea en el archivo `/etc/ssh/sshd_config`:
+    ```sh
+    Match User sftpuser
+    PasswordAuthentication no
+    PubkeyAuthentication yes
+    ChrootDirectory /home/sftpuser
+    ForceCommand internal-sftp
+    AllowTcpForwarding no
+    PermitTunnel no
+    X11Forwarding no
+    ```
+
+2. Aplica los cambios reiniciando el servicio SSH:
+    ```sh
+    sudo systemctl restart ssh
+    ```
+
+## 7. Conclusión
 
 Este informe documenta la configuración del servicio SFTP en un servidor Debian, incluyendo la autenticación mediante claves SSH, y la conexión desde un cliente Windows utilizando FileZilla. Se han cubierto los aspectos esenciales de la instalación, configuración, verificación del servicio y resolución de problemas para asegurar una operación exitosa y segura.
