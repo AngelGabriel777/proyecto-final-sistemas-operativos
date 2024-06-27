@@ -23,9 +23,9 @@
     ```conf
     auto enp0s3
     iface enp0s3 inet static
-      address 192.168.1.10
+      address 192.168.1.20
       netmask 255.255.255.0
-      gateway 192.168.1.1
+      gateway 192.168.1.20
     ```
 
 3. **Configuración de las Zonas de DNS**
