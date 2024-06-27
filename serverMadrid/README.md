@@ -275,15 +275,3 @@
     curl -I http://unisimon.com
     ```
     Verificar que la respuesta incluya un código de estado `200 OK`.
-
-## Documentación y Presentación
-1. **Informe:**
-    - Descripción del entorno de virtualización.
-    - Pasos detallados de la configuración de cada servidor.
-    - Capturas de pantalla y/o registros de comandos ejecutados.
-    - Resultados de pruebas de funcionamiento.
-
-2. **Presentación:**
-    - Diagrama de la topología de red.
-    - Resumen de la configuración y servicios implementados.
-    - Resultados obtenidos y conclusiones.
