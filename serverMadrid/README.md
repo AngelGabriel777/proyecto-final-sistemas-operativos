@@ -1,40 +1,63 @@
-# Configuración del Servidor DNS y Servidor Web
+# Proyecto Final: Configuración de Servidores
+
+## Introducción
+Este proyecto representa la actividad final del curso de Sistemas Operativos 2024-1. Utilizando herramientas de virtualización, se ha diseñado la estructura necesaria para cumplir con la topología propuesta. Los servidores serverManchester, serverMadrid y serverOslo están basados en Debian, mientras que el serverParis está basado en Ubuntu Server.
+
+## Topología
+![Topología del Proyecto](path/to/your/image.png)
 
 ## Requisitos Previos
-- **Sistema Operativo:** Debian 12 (sin interfaz gráfica).
+- **Sistema Operativo:** Debian 12 para serverManchester, serverMadrid y serverOslo; Ubuntu Server para serverParis.
 - **VirtualBox:** Instalado y configurado.
 - **Acceso a Internet:** Para instalar los paquetes necesarios.
 - **Permisos de superusuario:** Para realizar configuraciones del sistema.
+- **Herramientas SSH:** Como PuTTY (Windows) o Bash (Linux).
+- **Conexión de Red:** Configurada para permitir la comunicación entre las máquinas virtuales y el host.
 
-## Pasos para la Configuración del Servidor DNS
+## Pasos de Configuración
 
-1. **Instalación del Software Necesario**
+### Configuración de Red
+1. **Configurar las interfaces de red en Debian (`/etc/network/interfaces`):**
+    ```plaintext
+    auto eth0
+    iface eth0 inet static
+        address 192.168.1.X  # Reemplaza X con la IP correspondiente
+        netmask 255.255.255.0
+        gateway 192.168.1.1
+        dns-nameservers 192.168.1.20
+    ```
 
-    Primero, asegúrate de que el sistema esté actualizado e instala el servidor DNS `bind9`:
+2. **Configurar las interfaces de red en Ubuntu Server (`/etc/netplan/01-netcfg.yaml`):**
+    ```yaml
+    network:
+      version: 2
+      ethernets:
+        eth0:
+          addresses:
+            - 192.168.1.X/24  # Reemplaza X con la IP correspondiente
+          gateway4: 192.168.1.1
+          nameservers:
+            addresses:
+              - 192.168.1.20
+    ```
+
+3. **Aplicar la configuración de red:**
+    ```bash
+    sudo netplan apply
+    ```
+
+### Configuración del Servidor DNS (serverMadrid)
+1. **Actualizar el sistema e instalar BIND9:**
     ```bash
     sudo apt update
     sudo apt install bind9
     ```
-2. **Configurar la IP estática de la interfaz**:
-    ```sh
-    sudo nano /etc/network/interfaces
-    ```
-    **Ejemplo**:
-    ```conf
-    auto enp0s3
-    iface enp0s3 inet static
-      address 192.168.1.20
-      netmask 255.255.255.0
-      gateway 192.168.1.20
-    ```
 
-3. **Configuración de las Zonas de DNS**
-
-    Edita el archivo de configuración principal de BIND `/etc/bind/named.conf.local`:
+2. **Editar el archivo de configuración de BIND:**
     ```bash
     sudo nano /etc/bind/named.conf.local
     ```
-    Añade la configuración para la zona `unisimon.com`:
+    Añadir la configuración para la zona `unisimon.com`:
     ```plaintext
     zone "unisimon.com" {
         type master;
@@ -42,14 +65,12 @@
     };
     ```
 
-4. **Configuración del Archivo de Zona Directa**
-
-    Crea el directorio para las zonas si no existe y configura el archivo de zona directa:
+3. **Crear y configurar el archivo de zona directa:**
     ```bash
     sudo mkdir -p /etc/bind/zones
     sudo nano /etc/bind/zones/db.unisimon.com
     ```
-    El contenido del archivo de zona directa debe ser:
+    Añadir el contenido:
     ```plaintext
     $TTL    604800
     @       IN      SOA     ns.unisimon.com. admin.unisimon.com. (
@@ -64,51 +85,92 @@
     @       IN      A       192.168.1.20
     ```
 
-5. **Verificación de la Configuración de BIND**
+4. **Añadir la configuración para la zona inversa en el archivo de configuración de BIND:**
+    ```bash
+    sudo nano /etc/bind/named.conf.local
+    ```
+    Añadir la configuración:
+    ```plaintext
+    zone "1.168.192.in-addr.arpa" {
+        type master;
+        file "/etc/bind/zones/db.192.168.1";
+    };
+    ```
 
-    Verifica que la configuración de BIND no tenga errores:
+5. **Crear y configurar el archivo de zona inversa:**
+    ```bash
+    sudo nano /etc/bind/zones/db.192.168.1
+    ```
+    Añadir el contenido:
+    ```plaintext
+    $TTL    604800
+    @       IN      SOA     ns.unisimon.com. admin.unisimon.com. (
+                            2024010101         ; Serial
+                            604800             ; Refresh
+                            86400              ; Retry
+                            2419200            ; Expire
+                            604800 )           ; Negative Cache TTL
+    ;
+    @       IN      NS      ns.unisimon.com.
+    20      IN      PTR     unisimon.com.
+    ```
+
+6. **Configurar opciones adicionales de seguridad en BIND:**
+    ```bash
+    sudo nano /etc/bind/named.conf.options
+    ```
+    Añadir o modificar las opciones:
+    ```plaintext
+    options {
+        directory "/var/cache/bind";
+        recursion no;  # Desactiva la recursión si no es necesaria
+        allow-query { any; };
+        allow-transfer { none; };  # Desactiva las transferencias de zona
+        dnssec-validation auto;
+        auth-nxdomain no;  # Conformidad con RFC 1035
+        listen-on { any; };
+    };
+    ```
+
+7. **Verificar la configuración de BIND:**
     ```bash
     sudo named-checkconf
     sudo named-checkzone unisimon.com /etc/bind/zones/db.unisimon.com
+    sudo named-checkzone 1.168.192.in-addr.arpa /etc/bind/zones/db.192.168.1
     ```
 
-6. **Reinicio y Habilitación del Servicio BIND**
-
-    Reinicia el servicio BIND para aplicar los cambios:
+8. **Reiniciar y habilitar el servicio BIND:**
     ```bash
     sudo systemctl restart bind9
     sudo systemctl enable bind9
     ```
-    
-7. **Verificación del Funcionamiento del Servidor DNS**
 
-    Para verificar que el servidor DNS está funcionando correctamente, utiliza el comando `dig`:
+9. **Permitir tráfico DNS en el firewall:**
+    ```bash
+    sudo ufw allow Bind9
+    ```
+
+10. **Verificar el funcionamiento del servidor DNS:**
     ```bash
     dig @192.168.1.20 unisimon.com
+    dig @192.168.1.20 -x 192.168.1.20
     ```
-    Verifica que la respuesta contenga la dirección IP correcta (`192.168.1.20`).
 
-## Configuración del Servidor Web
-
-1. **Instalación del Servidor Web**
-
-    Instala el servidor web NGINX:
+### Configuración del Servidor Web (serverMadrid)
+1. **Instalar NGINX:**
     ```bash
     sudo apt install nginx
     ```
 
-2. **Configuración del Sitio Web**
-
-    Crea el archivo de configuración del sitio para `unisimon.com`:
+2. **Crear y configurar el archivo del sitio web:**
     ```bash
     sudo nano /etc/nginx/sites-available/unisimon.com
     ```
-    Añade la configuración del sitio:
+    Añadir la configuración:
     ```plaintext
     server {
         listen 80;
         server_name unisimon.com www.unisimon.com;
-
         root /var/www/unisimon.com;
         index index.html;
 
@@ -117,19 +179,18 @@
         }
     }
     ```
-    Haz un enlace simbólico en el directorio de sitios habilitados:
+
+3. **Hacer un enlace simbólico en el directorio de sitios habilitados:**
     ```bash
     sudo ln -s /etc/nginx/sites-available/unisimon.com /etc/nginx/sites-enabled/
     ```
 
-3. **Creación del Archivo `index.html`**
-
-    Crea el directorio para el sitio web y el archivo `index.html`:
+4. **Crear el directorio y archivo `index.html`:**
     ```bash
     sudo mkdir -p /var/www/unisimon.com
     sudo nano /var/www/unisimon.com/index.html
     ```
-    Añade el contenido del archivo `index.html`:
+    Añadir el contenido:
     ```html
     <!DOCTYPE html>
     <html>
@@ -143,21 +204,54 @@
     </html>
     ```
 
-4. **Ajuste de Permisos**
-
-    Asegura los permisos adecuados para el directorio del sitio web:
+5. **Ajustar permisos:**
     ```bash
     sudo chown -R www-data:www-data /var/www/unisimon.com
     sudo chmod -R 755 /var/www/unisimon.com
     ```
 
-5. **Reinicio del Servidor Web**
+6. **Configurar opciones adicionales de seguridad en NGINX:**
+    ```bash
+    sudo nano /etc/nginx/nginx.conf
+    ```
+    Añadir las directivas dentro del bloque `http`:
+    ```plaintext
+    http {
+        ...
+        server_tokens off;
+        add_header X-Content-Type-Options nosniff;
+        add_header X-XSS-Protection "1; mode=block";
+        add_header X-Frame-Options "SAMEORIGIN";
+        add_header Content-Security-Policy "default-src 'self'";
+    }
+    ```
 
-    Reinicia NGINX para aplicar los cambios:
+7. **Verificar la configuración de NGINX:**
+    ```bash
+    sudo nginx -t
+    ```
+
+8. **Reiniciar NGINX:**
     ```bash
     sudo systemctl restart nginx
     ```
 
-6. **Verificación del Funcionamiento del Servidor Web**
+9. **Permitir tráfico HTTP en el firewall:**
+    ```bash
+    sudo ufw allow 'Nginx HTTP'
+    ```
 
-    Accede a `http://unisimon.com` desde un navegador web para verificar que la página se carga correctamente.
+10. **Verificar el funcionamiento del servidor web:**
+    Accede a `http://unisimon.com` desde un navegador web.
+
+## Documentación y Presentación
+1. **Informe:**
+    - Descripción del entorno de virtualización.
+    - Pasos detallados de la configuración de cada servidor.
+    - Capturas de pantalla y/o registros de comandos ejecutados.
+    - Resultados de pruebas de funcionamiento.
+
+2. **Presentación:**
+    - Diagrama de la topología de red.
+    - Resumen de la configuración y servicios implementados.
+    - Resultados obtenidos y conclusiones.
