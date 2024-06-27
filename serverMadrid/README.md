@@ -15,8 +15,20 @@
     sudo apt update
     sudo apt install bind9
     ```
+2. **Configurar la IP estática de la interfaz**:
+    ```sh
+    sudo nano /etc/network/interfaces
+    ```
+    **Ejemplo**:
+    ```conf
+    auto enp0s3
+    iface enp0s3 inet static
+      address 192.168.1.10
+      netmask 255.255.255.0
+      gateway 192.168.1.1
+    ```
 
-2. **Configuración de las Zonas de DNS**
+3. **Configuración de las Zonas de DNS**
 
     Edita el archivo de configuración principal de BIND `/etc/bind/named.conf.local`:
     ```bash
@@ -30,7 +42,7 @@
     };
     ```
 
-3. **Configuración del Archivo de Zona Directa**
+4. **Configuración del Archivo de Zona Directa**
 
     Crea el directorio para las zonas si no existe y configura el archivo de zona directa:
     ```bash
@@ -52,7 +64,7 @@
     @       IN      A       192.168.1.20
     ```
 
-4. **Verificación de la Configuración de BIND**
+5. **Verificación de la Configuración de BIND**
 
     Verifica que la configuración de BIND no tenga errores:
     ```bash
@@ -60,21 +72,14 @@
     sudo named-checkzone unisimon.com /etc/bind/zones/db.unisimon.com
     ```
 
-5. **Reinicio y Habilitación del Servicio BIND**
+6. **Reinicio y Habilitación del Servicio BIND**
 
     Reinicia el servicio BIND para aplicar los cambios:
     ```bash
     sudo systemctl restart bind9
     sudo systemctl enable bind9
     ```
-
-6. **Configuración del Firewall**
-
-    Si tienes un firewall configurado, permite el tráfico DNS. Asumiendo que estás utilizando `ufw`:
-    ```bash
-    sudo ufw allow Bind9
-    ```
-
+    
 7. **Verificación del Funcionamiento del Servidor DNS**
 
     Para verificar que el servidor DNS está funcionando correctamente, utiliza el comando `dig`:
