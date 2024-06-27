@@ -13,7 +13,7 @@
     ```plaintext
     auto eth0
     iface eth0 inet static
-        address 192.168.1.20  
+        address 192.168.1.X  # Reemplaza X con la IP correspondiente
         netmask 255.255.255.0
         gateway 192.168.1.1
         dns-nameservers 192.168.1.20
@@ -235,6 +235,46 @@
 
 10. **Verificar el funcionamiento del servidor web:**
     Accede a `http://unisimon.com` desde un navegador web.
+
+### Pruebas de Funcionamiento
+
+#### Pruebas para el Servidor DNS
+1. **Consulta de dominio:**
+    ```bash
+    dig @192.168.1.20 unisimon.com
+    ```
+    Verificar que la respuesta incluya la dirección IP `192.168.1.20`.
+
+2. **Consulta inversa:**
+    ```bash
+    dig @192.168.1.20 -x 192.168.1.20
+    ```
+    Verificar que la respuesta incluya el dominio `unisimon.com`.
+
+3. **Prueba desde otro servidor:**
+    ```bash
+    dig @192.168.1.20 unisimon.com
+    dig @192.168.1.20 -x 192.168.1.20
+    ```
+    Verificar que las respuestas sean correctas.
+
+#### Pruebas para el Servidor Web
+1. **Acceso desde un navegador web:**
+    - Abrir un navegador web.
+    - Acceder a `http://unisimon.com`.
+    - Verificar que se muestra la página de bienvenida con el mensaje "¡Bienvenido a Unisimon!".
+
+2. **Consulta desde la línea de comandos:**
+    ```bash
+    curl -I http://unisimon.com
+    ```
+    Verificar que la respuesta incluya un código de estado `200 OK`.
+
+3. **Prueba desde otro servidor:**
+    ```bash
+    curl -I http://unisimon.com
+    ```
+    Verificar que la respuesta incluya un código de estado `200 OK`.
 
 ## Documentación y Presentación
 1. **Informe:**
