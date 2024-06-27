@@ -32,6 +32,4 @@ Cada servidor tiene su propia sección donde se detallan los pasos para su confi
 - [Server Oslo](serverOslo/README.md)
 - [Server Paris](serverParis/README.md)
 
-## Informe Detallado
 
-Un informe detallado que documenta todo el proceso de configuración se puede encontrar en la sección [Informe Detallado](informe/README.md).
