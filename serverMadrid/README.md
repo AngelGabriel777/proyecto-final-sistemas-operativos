@@ -1,27 +1,19 @@
-# Proyecto Final: Configuración de Servidores
-
-## Introducción
-Este proyecto representa la actividad final del curso de Sistemas Operativos 2024-1. Utilizando herramientas de virtualización, se ha diseñado la estructura necesaria para cumplir con la topología propuesta. Los servidores serverManchester, serverMadrid y serverOslo están basados en Debian, mientras que el serverParis está basado en Ubuntu Server.
-
-## Topología
-![Topología del Proyecto](path/to/your/image.png)
+# Configuración del Servidor DNS y Servidor Web
 
 ## Requisitos Previos
-- **Sistema Operativo:** Debian 12 para serverManchester, serverMadrid y serverOslo; Ubuntu Server para serverParis.
-- **VirtualBox:** Instalado y configurado.
-- **Acceso a Internet:** Para instalar los paquetes necesarios.
-- **Permisos de superusuario:** Para realizar configuraciones del sistema.
-- **Herramientas SSH:** Como PuTTY (Windows) o Bash (Linux).
-- **Conexión de Red:** Configurada para permitir la comunicación entre las máquinas virtuales y el host.
+- *Sistema Operativo:* Debian 12 (sin interfaz gráfica).
+- *VirtualBox:* Instalado y configurado.
+- *Acceso a Internet:* Para instalar los paquetes necesarios.
+- *Permisos de superusuario:* Para realizar configuraciones del sistema.
 
-## Pasos de Configuración
+## Pasos para la Configuración del Servidor DNS
 
 ### Configuración de Red
 1. **Configurar las interfaces de red en Debian (`/etc/network/interfaces`):**
     ```plaintext
     auto eth0
     iface eth0 inet static
-        address 192.168.1.X  # Reemplaza X con la IP correspondiente
+        address 192.168.1.20  
         netmask 255.255.255.0
         gateway 192.168.1.1
         dns-nameservers 192.168.1.20
