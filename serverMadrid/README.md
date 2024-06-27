@@ -1,25 +1,19 @@
-# Configuración de Servidor DNS y Web en Debian 12
+# Configuración del Servidor DNS y Servidor Web
 
-Este proyecto detalla cómo configurar un servidor DNS y un servidor web en Debian 12 sin interfaz gráfica.
+## Introducción
+Este informe detalla el proceso de desarrollo y configuración de un servidor DNS en un sistema operativo Debian 12 sin interfaz gráfica, alojado en VirtualBox. El servidor DNS se utilizará para resolver nombres de dominio a direcciones IP, facilitando la navegación en la red mediante nombres de dominio amigables. Además, se configurará un servidor web que servirá una página HTML de bienvenida para `unisimon.com`.
 
 ## Requisitos Previos
+- **Sistema Operativo:** Debian 12 (sin interfaz gráfica).
+- **VirtualBox:** Instalado y configurado.
+- **Acceso a Internet:** Para instalar los paquetes necesarios.
+- **Permisos de superusuario:** Para realizar configuraciones del sistema.
 
-- **Sistema Operativo:** Debian 12
-- **VirtualBox:** Instalado
-- **Acceso a Internet**
-- **Permisos de superusuario**
+## Pasos para la Configuración del Servidor DNS
 
-## Configuración del Servidor DNS
-
-### Instalación del Software Necesario
-
-Actualice el sistema e instale `bind9`:
-
-```sh
+### 1. Instalación del Software Necesario
+Primero, asegúrate de que el sistema esté actualizado e instala el servidor DNS `bind9`:
+```bash
 sudo apt update
-sudo apt install bind9 bind9utils bind9-doc
-```
+sudo apt install bind9
 
-# hola
-## HOLA
-### hola
