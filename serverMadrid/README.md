@@ -13,7 +13,7 @@
     ```plaintext
     auto eth0
     iface eth0 inet static
-        address 192.168.1.X  # Reemplaza X con la IP correspondiente
+        address 192.168.1.20  
         netmask 255.255.255.0
         gateway 192.168.1.1
         dns-nameservers 192.168.1.20
